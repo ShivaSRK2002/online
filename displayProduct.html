@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="displayItemsStyle.css"> <!-- Link to your CSS file -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet"> <!-- Import stylish font -->
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="brand-title">Wood Work Street</h1>
+            <nav class="nav-links">
+                <a href="displayProduct.html">Home</a>
+                <a href="cutomerSearch.html">Search</a>
+                <a href="Profile.html">Profile</a>
+                <a href="cart.html">Cart</a>
+                <a href="#order">Order</a>
+                <a href="home.html">LogOut</a>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div id="inventoryList"></div> <!-- Container to display inventory items -->
+        <div id="pagination">
+            <button id="prevPageBtn">&lt;&lt; Previous</button>
+            <button id="nextPageBtn">Next &gt;&gt;</button>
+        </div>
+    </div>
+    
+    <script src="displayItemsScript.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>

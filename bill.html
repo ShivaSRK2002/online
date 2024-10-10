@@ -1,0 +1,301 @@
+
+<!----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Summary</title>
+    <link rel="stylesheet" href="billScript.css"> 
+</head>
+<body>
+    <div class="bill-container" id="billContainer">
+        <header>
+            <h1>Wood Work Street</h1>
+            <p id="dateTime"></p>
+        </header>
+
+        <section class="customer-details">
+            <h2>Customer Details</h2>
+            <p><strong>Name:</strong> <span id="customerName"></span></p>
+            <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+            <p><strong>Address:</strong> <span id="customerAddress"></span></p>
+        </section>
+
+        <section class="items-purchased">
+            <h2>Items Purchased</h2>
+            <div id="itemsList"></div>
+            <h3 id="totalCost"></h3>
+        </section>
+
+        <button id="downloadBillBtn">Download Bill</button>
+    </div>
+
+    <script src="billScript.js"></script> 
+</body>
+</html>
+----------->
+
+
+
+
+<!------pakka--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Summary</title>
+</head>
+<body>
+    <h1>Bill Summary</h1>
+
+  
+    <h2>Address</h2>
+    <p><strong>Address:</strong> Wood Work Street</p>
+
+
+    <h2>Current Date and Time</h2>
+    <p id="dateTime"></p>
+
+  
+    <h2>Customer Details</h2>
+    <p><strong>Name:</strong> <span id="customerName"></span></p>
+    <p><strong>Phone Number:</strong> <span id="customerPhone"></span></p>
+    <p><strong>Address:</strong> <span id="customerAddress"></span></p>
+    <p><strong>Payment Type:</strong> <span id="paymentType"></span></p>
+
+   
+    <h2>Items in Your Cart</h2>
+    <div id="cartItems"></div>
+
+   
+    <h2>Total Amount</h2>
+    <p><strong>Total:</strong> $<span id="totalAmount">0.00</span></p>
+
+ 
+    <button id="downloadBill">Done</button>
+
+    <script>
+        // Function to update the current date and time
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('dateTime').textContent = now.toLocaleString();
+        }
+
+        // Call updateDateTime every second
+        setInterval(updateDateTime, 1000);
+        updateDateTime(); // Call once to set immediately
+
+        // Retrieve customer details from sessionStorage
+        document.getElementById('customerName').textContent = sessionStorage.getItem('customerName');
+        document.getElementById('customerPhone').textContent = sessionStorage.getItem('customerPhone');
+        document.getElementById('customerAddress').textContent = sessionStorage.getItem('customerAddress');
+        document.getElementById('paymentType').textContent = sessionStorage.getItem('paymentType');
+
+        // Retrieve and display cart items
+        const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+        const cartItemsDiv = document.getElementById('cartItems');
+        let totalAmount = 0; // Variable to calculate total amount
+
+        if (cart.length === 0) {
+            cartItemsDiv.innerHTML = '<p>Your cart is empty.</p>';
+        } else {
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity; // Calculate item total
+                totalAmount += itemTotal; // Add to total amount
+                cartItemsDiv.innerHTML += `<p>${item.title} - $${item.price} x ${item.quantity} = $${itemTotal.toFixed(2)}</p>`;
+            });
+        }
+
+        // Display total amount
+        document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+
+        // Download bill as bill.txt when Done button is clicked
+        document.getElementById('downloadBill').addEventListener('click', function() {
+            const billContent = `
+                Bill Summary
+                Address: Wood Work Street
+                Date & Time: ${new Date().toLocaleString()}
+                Customer Details:
+                Name: ${sessionStorage.getItem('customerName')}
+                Phone Number: ${sessionStorage.getItem('customerPhone')}
+                Address: ${sessionStorage.getItem('customerAddress')}
+                Payment Type: ${sessionStorage.getItem('paymentType')}
+                
+                Items in Your Cart:
+                ${cart.map(item => `${item.title} - $${item.price} x ${item.quantity} = $${(item.price * item.quantity).toFixed(2)}`).join('\n')}
+
+                Total: $${totalAmount.toFixed(2)}
+            `;
+
+            // Create a blob from the bill content
+            const blob = new Blob([billContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'bill.txt';
+
+            // Programmatically click the link to trigger download
+            link.click();
+
+            // Clean up the URL object
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html>
+--------->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet"> 
+    <title>Bill</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .bill-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .total-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+        #downloadBillBtn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            width: 100%; /* Full width for button */
+        }
+        #downloadBillBtn:hover {
+            background-color: #45a049;
+        }
+        .notification {
+            display: none; /* Initially hidden */
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bill-container">
+        <h1>Bill Details</h1>
+        <p id="currentDateTime"></p>
+        <h3>Customer Details</h3>
+        <p id="customerName"></p>
+        <p id="customerPhone"></p>
+        <p id="customerAddress"></p>
+        <h3>Items Purchased</h3>
+        <div id="itemList"></div>
+        <div class="total-amount" id="totalAmount"></div>
+        <button id="downloadBillBtn">Download Bill</button>
+        <div class="notification" id="downloadStatus"></div> <!-- Notification area for download -->
+    </div>
+
+    <script>
+        // Function to format date and time
+        function formatDateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            return now.toLocaleString(undefined, options);
+        }
+
+        // Function to display bill details
+        function displayBillDetails() {
+            const billDetails = JSON.parse(localStorage.getItem('billDetails'));
+            if (billDetails) {
+                document.getElementById('currentDateTime').innerText = `Date & Time: ${formatDateTime()}`;
+                document.getElementById('customerName').innerText = `Name: ${billDetails.customerName}`;
+                document.getElementById('customerPhone').innerText = `Phone: ${billDetails.customerPhone}`;
+                document.getElementById('customerAddress').innerText = `Address: ${billDetails.customerAddress}`;
+                const itemList = document.getElementById('itemList');
+                let totalAmount = 0;
+                billDetails.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.innerText = `Item: ${item.title}, Price: $${item.price.toFixed(2)}, Quantity: ${item.quantity}`;
+                    itemList.appendChild(itemElement);
+                    totalAmount += item.price * item.quantity;
+                });
+                document.getElementById('totalAmount').innerText = `Total Amount: $${totalAmount.toFixed(2)}`;
+            }
+        }
+
+        // Function to download bill as a text file
+        function downloadBill() {
+            const billDetails = JSON.parse(localStorage.getItem('billDetails'));
+            const billContent = `Bill Details\n\nDate & Time: ${formatDateTime()}\nName: ${billDetails.customerName}\nPhone: ${billDetails.customerPhone}\nAddress: ${billDetails.customerAddress}\n\nItems Purchased:\n`;
+
+            let itemDetails = '';
+            billDetails.items.forEach(item => {
+                itemDetails += `Item: ${item.title}, Price: $${item.price.toFixed(2)}, Quantity: ${item.quantity}\n`;
+            });
+
+            const totalAmount = billDetails.totalAmount;
+            const finalContent = `${billContent}${itemDetails}\nTotal Amount: $${totalAmount.toFixed(2)}`;
+
+            const blob = new Blob([finalContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'bill.txt';
+            link.click();
+
+            // Show download status message
+            showDownloadStatus('Bill downloaded successfully!', 3000);
+        }
+
+        // Function to show download status
+        function showDownloadStatus(message, duration = 3000) {
+            const downloadStatus = document.getElementById('downloadStatus');
+            downloadStatus.innerText = message;
+            downloadStatus.style.display = 'block'; // Show message
+            setTimeout(() => {
+                downloadStatus.style.display = 'none'; // Hide after duration
+            }, duration);
+        }
+
+        // Initial call to display bill details
+        displayBillDetails();
+
+        // Button click event to download the bill
+        document.getElementById('downloadBillBtn').onclick = downloadBill;
+    </script>
+</body>
+</html>
+

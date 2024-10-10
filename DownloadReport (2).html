@@ -1,0 +1,288 @@
+<!---- all , category , high
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Categories</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #itemsContainer {
+            margin-top: 20px;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #statusMessage {
+            margin-top: 20px;
+            color: red;
+        }
+
+        #categoriesContainer {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusMessage = document.getElementById('statusMessage');
+            const itemsContainer = document.getElementById('itemsContainer');
+
+            // Fetch all items
+            document.getElementById('allCategoriesBtn').addEventListener('click', () => {
+                fetchItems('all');
+            });
+
+            // Fetch high stock items (quantity > 100)
+            document.getElementById('highStockBtn').addEventListener('click', () => {
+                fetchItems('highStock');
+            });
+
+            // Fetch low stock items (quantity < 15)
+            document.getElementById('lowStockBtn').addEventListener('click', () => {
+                fetchItems('lowStock');
+            });
+
+            // Function to fetch items based on stock type
+            function fetchItems(type) {
+                let quantityCondition = (type === 'highStock') ? 100 : (type === 'lowStock') ? 15 : null;
+                let csvFilename = type === 'highStock' ? 'highstock.csv' : (type === 'lowStock') ? 'lowstock.csv' : 'allCategories.csv';
+                let stockCondition = type === 'highStock' ? (quantity => quantity > 100) : (quantity => quantity < 15);
+
+                fetch('https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/InventoryRecord')
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => { 
+                                throw new Error(`Error fetching items: ${response.statusText} - ${text}`); 
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        itemsContainer.innerHTML = ''; // Clear previous items
+                        let csvContent = 'Cat_id,CategoryName,Description,ItemId,Price,Quantity,Title\n';  // CSV Header
+
+                        if (!data.documents || data.documents.length === 0) {
+                            itemsContainer.innerHTML = `<p>No items found in the inventory.</p>`;
+                            statusMessage.textContent = '';
+                            return;
+                        }
+
+                        const filteredItems = (type === 'all')
+                            ? data.documents
+                            : data.documents.filter(doc => stockCondition(doc.fields.Quantity.integerValue));
+
+                        if (filteredItems.length === 0) {
+                            itemsContainer.innerHTML = `<p>No ${type === 'highStock' ? 'high' : 'low'} stock items found.</p>`;
+                            return;
+                        }
+
+                        filteredItems.forEach(doc => {
+                            const fields = doc.fields;
+                            const itemDetails = `
+                                <strong>Cat_id:</strong> ${fields.Cat_id.stringValue}<br>
+                                <strong>Category Name:</strong> ${fields.CategoryName.stringValue}<br>
+                                <strong>Description:</strong> ${fields.Description.stringValue}<br>
+                                <strong>ItemId:</strong> ${fields.ItemId.integerValue}<br>
+                                <strong>Price:</strong> $${fields.Price.doubleValue.toFixed(2)}<br>
+                                <strong>Quantity:</strong> ${fields.Quantity.integerValue}<br>
+                                <strong>Title:</strong> ${fields.Title.stringValue}<br>
+                                <hr>
+                            `;
+
+                            // Append details to CSV content
+                            csvContent += `${fields.Cat_id.stringValue},${fields.CategoryName.stringValue},${fields.Description.stringValue},${fields.ItemId.integerValue},${fields.Price.doubleValue},${fields.Quantity.integerValue},${fields.Title.stringValue}\n`;
+
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'item';
+                            itemDiv.innerHTML = itemDetails;
+                            itemsContainer.appendChild(itemDiv);
+                        });
+
+                        // Create CSV file and download
+                        const blob = new Blob([csvContent], { type: 'text/csv' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = csvFilename;
+                        link.click();
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching ${type} items:`, error);
+                        statusMessage.textContent = `Error fetching ${type} items. Please try again later.`;
+                    });
+            }
+        });
+    </script>
+
+    <h1>Inventory Management</h1>
+    <div>
+        <button id="allCategoriesBtn">Fetch All Categories</button>
+        <button id="highStockBtn">Fetch High Stock Items (Quantity > 100)</button>
+        <button id="lowStockBtn">Fetch Low Stock Items (Quantity < 15)</button>
+    </div>
+    <div id="itemsContainer"></div>
+    <div id="statusMessage"></div>
+</body>
+</html>
+-------->
+
+<!---- all, category , high , low ---->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Categories</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #itemsContainer {
+            margin-top: 20px;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        #statusMessage {
+            margin-top: 20px;
+            color: red;
+        }
+
+        #categoriesContainer {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusMessage = document.getElementById('statusMessage');
+            const itemsContainer = document.getElementById('itemsContainer');
+
+            // Fetch all items
+            document.getElementById('allCategoriesBtn').addEventListener('click', () => {
+                fetchItems('all');
+            });
+
+            // Fetch high stock items (quantity > 100)
+            document.getElementById('highStockBtn').addEventListener('click', () => {
+                fetchItems('highStock');
+            });
+
+            // Fetch low stock items (quantity < 15)
+            document.getElementById('lowStockBtn').addEventListener('click', () => {
+                fetchItems('lowStock');
+            });
+
+            // Function to fetch items based on stock type
+            function fetchItems(type) {
+                let quantityCondition = (type === 'highStock') ? 100 : (type === 'lowStock') ? 15 : null;
+                let csvFilename = type === 'highStock' ? 'highstock.csv' : (type === 'lowStock') ? 'lowstock.csv' : 'allCategories.csv';
+                let stockCondition = type === 'highStock' ? (quantity => quantity > 100) : (quantity => quantity < 15);
+
+                fetch('https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/InventoryRecord')
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.text().then(text => { 
+                                throw new Error(`Error fetching items: ${response.statusText} - ${text}`); 
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        itemsContainer.innerHTML = ''; // Clear previous items
+                        let csvContent = 'Cat_id,CategoryName,Description,ItemId,Price,Quantity,Title\n';  // CSV Header
+
+                        if (!data.documents || data.documents.length === 0) {
+                            itemsContainer.innerHTML = `<p>No items found in the inventory.</p>`;
+                            statusMessage.textContent = '';
+                            return;
+                        }
+
+                        const filteredItems = (type === 'all')
+                            ? data.documents
+                            : data.documents.filter(doc => stockCondition(doc.fields.Quantity.integerValue));
+
+                        if (filteredItems.length === 0) {
+                            itemsContainer.innerHTML = `<p>No ${type === 'highStock' ? 'high' : 'low'} stock items found.</p>`;
+                            return;
+                        }
+
+                        filteredItems.forEach(doc => {
+                            const fields = doc.fields;
+                            const itemDetails = `
+                                <strong>Cat_id:</strong> ${fields.Cat_id.stringValue}<br>
+                                <strong>Category Name:</strong> ${fields.CategoryName.stringValue}<br>
+                                <strong>Description:</strong> ${fields.Description.stringValue}<br>
+                                <strong>ItemId:</strong> ${fields.ItemId.integerValue}<br>
+                                <strong>Price:</strong> $${fields.Price.doubleValue.toFixed(2)}<br>
+                                <strong>Quantity:</strong> ${fields.Quantity.integerValue}<br>
+                                <strong>Title:</strong> ${fields.Title.stringValue}<br>
+                                <hr>
+                            `;
+
+                            // Append details to CSV content
+                            csvContent += `${fields.Cat_id.stringValue},${fields.CategoryName.stringValue},${fields.Description.stringValue},${fields.ItemId.integerValue},${fields.Price.doubleValue},${fields.Quantity.integerValue},${fields.Title.stringValue}\n`;
+
+                            const itemDiv = document.createElement('div');
+                            itemDiv.className = 'item';
+                            itemDiv.innerHTML = itemDetails;
+                            itemsContainer.appendChild(itemDiv);
+                        });
+
+                        // Create CSV file and download
+                        const blob = new Blob([csvContent], { type: 'text/csv' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = csvFilename;
+                        link.click();
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching ${type} items:`, error);
+                        statusMessage.textContent = `Error fetching ${type} items. Please try again later.`;
+                    });
+            }
+        });
+    </script>
+
+    <h1>Inventory Management</h1>
+    <div>
+        <button id="allCategoriesBtn">Fetch All Categories</button>
+        <button id="highStockBtn">Fetch High Stock Items (Quantity > 100)</button>
+        <button id="lowStockBtn">Fetch Low Stock Items (Quantity < 15)</button>
+    </div>
+    <div id="itemsContainer"></div>
+    <div id="statusMessage"></div>
+</body>
+</html>

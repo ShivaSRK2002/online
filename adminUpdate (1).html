@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Categories</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        #updateSection {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        #updateSection h3 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        #updateMessage {
+            margin-top: 10px;
+            padding: 10px;
+            color: green;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            display: none;
+        }
+
+        #updateMessage.error {
+            color: red;
+            border-color: #dc3545;
+        }
+
+        #updateMessage.success {
+            border-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Category Management</h2>
+    <table border="1" id="categoryTable">
+        <thead>
+            <tr>
+                <th>Cat ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Category rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div id="updateSection" style="display:none;">
+        <h3>Update Category</h3>
+        <label>Title: <input type="text" id="updateTitle" required></label>
+        <label>Description: <input type="text" id="updateDescription" required></label>
+        <label>Quantity: <input type="number" id="updateQuantity" required></label>
+        <label>Price: <input type="number" id="updatePrice" required></label>
+        <label>Choose Image: <input type="file" id="updateImage" accept="image/*"></label>
+        <button onclick="saveUpdate()">Save</button>
+        <div id="updateMessage"></div>
+    </div>
+
+    <script>
+        let currentCategoryId = '';
+        const categoriesURL = "https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/categories";
+        const inventoryURL = "https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/InventoryRecord";
+
+        // Fetch categories and display them in the table
+        function fetchCategories() {
+            $.get(categoriesURL, function(data) {
+                let categories = data.documents;
+                let tableBody = $("#categoryTable tbody");
+                tableBody.empty();  // Clear previous data
+                categories.forEach(category => {
+                    let fields = category.fields;
+                    let row = `
+                        <tr>
+                            <td>${fields.cat_id.stringValue}</td>
+                            <td>${fields.Title.stringValue}</td>
+                            <td>${fields.Description.stringValue}</td>
+                            <td>${fields.Quantity.integerValue}</td>
+                            <td>${fields.Price.doubleValue}</td>
+                            <td><img src="${fields.image.stringValue}" alt="Category Image"></td>
+                            <td>
+                                <button onclick="editCategory('${category.name}')">Update</button>
+                                <button onclick="activateCategory('${category.name}')">Activate</button>
+                            </td>
+                        </tr>`;
+                    tableBody.append(row);
+                });
+            });
+        }
+
+        // Show the update section and pre-fill with selected category details
+        function editCategory(categoryId) {
+            currentCategoryId = categoryId;
+            $.get(`${categoriesURL}/${categoryId}`, function(data) {
+                let fields = data.fields;
+                $("#updateTitle").val(fields.Title.stringValue);
+                $("#updateDescription").val(fields.Description.stringValue);
+                $("#updateQuantity").val(fields.Quantity.integerValue);
+                $("#updatePrice").val(fields.Price.doubleValue);
+                $("#updateSection").show();
+            });
+        }
+
+        // Save the updated category details
+        function saveUpdate() {
+            let updatedData = {
+                fields: {
+                    Title: { stringValue: $("#updateTitle").val() },
+                    Description: { stringValue: $("#updateDescription").val() },
+                    Quantity: { integerValue: parseInt($("#updateQuantity").val()) },
+                    Price: { doubleValue: parseFloat($("#updatePrice").val()) },
+                }
+            };
+
+            // Handle image upload (if needed)
+            let imageFile = document.getElementById('updateImage').files[0];
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    updatedData.fields.image = { stringValue: reader.result }; // Store the image as a base64 string or change to your desired storage solution
+                    sendUpdateRequest(updatedData);
+                }
+                reader.readAsDataURL(imageFile);
+            } else {
+                sendUpdateRequest(updatedData);
+            }
+        }
+
+        function sendUpdateRequest(updatedData) {
+            $.ajax({
+                url: `${inventoryURL}/${currentCategoryId}`,
+                type: 'PATCH',
+                contentType: 'application/json',
+                data: JSON.stringify(updatedData),
+                success: function() {
+                    $("#updateMessage").text("Category updated successfully!").addClass("success").removeClass("error").show();
+                    $("#updateSection").hide();
+                    fetchCategories();  // Refresh the table
+                },
+                error: function() {
+                    $("#updateMessage").text("Failed to update category.").addClass("error").removeClass("success").show();
+                }
+            });
+        }
+
+        // Activate a category
+        function activateCategory(categoryId) {
+            // Here, implement the activation logic as needed, e.g., set an "active" flag in Firestore
+            alert("Category activated!");
+            window.location.href = "adminRead.html";  // Redirect to admin read page
+        }
+
+        // Initial load
+        $(document).ready(function() {
+            fetchCategories();
+        });
+    </script>
+
+</body>
+</html>

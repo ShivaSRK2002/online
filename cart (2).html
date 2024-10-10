@@ -1,0 +1,859 @@
+<!----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet"> 
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ddd;
+        }
+
+        main {
+            padding: 100px 20px;
+        }
+
+        .cart-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #cartList {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-item img {
+            max-width: 80px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item .item-details {
+            flex: 1;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-controls button {
+            margin: 0 5px;
+        }
+
+        .total-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        #proceedButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+        }
+
+        #proceedButton:hover {
+            background-color: #45a049;
+        }
+
+        #deliveryDetails {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #deliveryDetails label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        #deliveryDetails input[type="text"],
+        #deliveryDetails input[type="tel"],
+        #deliveryDetails textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        #confirmPaymentBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto 0;
+            width: 100%;
+        }
+
+        #confirmPaymentBtn:hover {
+            background-color: #218838;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .cart-section {
+                padding: 10px;
+            }
+
+            #deliveryDetails {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="brand-title">Wood Work Street</h1>
+            <nav class="nav-links">
+                <a href="displayProduct.html">Home</a>
+                <a href="cutomerSearch.html">Search</a>
+                <a href="Profile.html">Profile</a>
+                <a href="cart.html">Cart</a>
+                <a href="#order">Order</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="cart-section">
+            <h2>Your Cart</h2>
+            <div id="cartList"></div> 
+            <div class="total-amount" id="totalAmount" style="display: none;">Total Amount: $0.00</div>
+            <button id="proceedButton" style="display: none;">Proceed</button> 
+            <div id="deliveryDetails" style="display: none;">
+                <h3>Delivery Details</h3>
+                <label for="customerName">Name:</label>
+                <input type="text" id="customerName" required>
+                
+                <label for="customerPhone">Phone:</label>
+                <input type="tel" id="customerPhone" required>
+                
+                <label for="customerAddress">Address:</label>
+                <textarea id="customerAddress" required></textarea>
+                
+                <h4>Payment Method:</h4>
+                <input type="radio" name="paymentMethod" value="upi" id="upi">
+                <label for="upi">UPI Payment</label><br>
+                <input type="radio" name="paymentMethod" value="cod" id="cod">
+                <label for="cod">Cash on Delivery</label><br>
+                <input type="radio" name="paymentMethod" value="creditCard" id="creditCard">
+                <label for="creditCard">Credit Card</label><br>
+
+                <button id="confirmPaymentBtn">Proceed to Payment</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Wood Work Street. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const cartList = document.getElementById('cartList');
+            const totalAmountElement = document.getElementById('totalAmount');
+            cartList.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartList.innerText = 'Your cart is empty.';
+                totalAmountElement.style.display = 'none'; 
+                return;
+            }
+
+            let totalAmount = 0; 
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item'); 
+                cartItem.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}" />
+                    <div class="item-details">
+                        <h3 class="item-title">${item.title}</h3>
+                        <p class="item-price">Price: $${item.price.toFixed(2)}</p>
+                    </div>
+                `;
+
+                const quantityControls = document.createElement('div');
+                quantityControls.classList.add('quantity-controls');
+
+                const minusButton = document.createElement('button');
+                minusButton.innerText = '-';
+                minusButton.onclick = () => updateQuantity(item.id, -1);
+
+                const quantityDisplay = document.createElement('span');
+                quantityDisplay.innerText = ` Quantity: ${item.quantity} `;
+
+                const plusButton = document.createElement('button');
+                plusButton.innerText = '+';
+                plusButton.onclick = () => updateQuantity(item.id, 1);
+
+                quantityControls.appendChild(minusButton);
+                quantityControls.appendChild(quantityDisplay);
+                quantityControls.appendChild(plusButton);
+
+                cartItem.appendChild(quantityControls);
+                cartList.appendChild(cartItem);
+
+                totalAmount += item.price * item.quantity;
+            });
+
+            totalAmountElement.innerText = `Total Amount: $${totalAmount.toFixed(2)}`;
+            totalAmountElement.style.display = 'block'; 
+
+            document.getElementById('proceedButton').style.display = 'block';
+        }
+
+        function updateQuantity(itemId, change) {
+            const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const item = cart.find(i => i.id === itemId);
+
+            if (item) {
+                item.quantity += change;
+
+                if (item.quantity <= 0) {
+                    const itemIndex = cart.indexOf(item);
+                    cart.splice(itemIndex, 1);
+                }
+            }
+
+            sessionStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        document.getElementById('proceedButton').addEventListener('click', () => {
+            document.getElementById('deliveryDetails').style.display = 'block';
+        });
+
+        document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
+            const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const customerName = document.getElementById('customerName').value;
+            const customerPhone = document.getElementById('customerPhone').value;
+            const customerAddress = document.getElementById('customerAddress').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            if (cart.length === 0) {
+                alert('Your cart is empty. Please add items to your cart before proceeding.');
+                return;
+            }
+
+            const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+            // Generate bill.txt content
+            const currentDateTime = new Date();
+            const formattedDateTime = currentDateTime.toLocaleString();
+
+            let billContent = `Wood Work Street\n`;
+            billContent += `Date & Time: ${formattedDateTime}\n`;
+            billContent += '--------------------------------\n'; 
+            billContent += `Customer Name: ${customerName}\n`;
+            billContent += `Phone: ${customerPhone}\n`;
+            billContent += `Address: ${customerAddress}\n`;
+            billContent += `Payment Method: ${paymentMethod}\n`;
+            billContent += '--------------------------------\n'; 
+            billContent += `Order Details:\n`;
+            cart.forEach(item => {
+                billContent += `${item.title} - Quantity: ${item.quantity}, Price: $${item.price.toFixed(2)}\n`;
+            });
+            billContent += `Total Amount: $${totalAmount.toFixed(2)}\n`;
+            billContent += '--------------------------------\n'; 
+            billContent += 'Thank you for visiting! Come again!\n'; 
+
+            // Create a blob and download the bill.txt file
+            const blob = new Blob([billContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'bill.txt';
+            link.click();
+
+            // Clear the cart after payment
+            sessionStorage.removeItem('cart');
+            displayCart(); 
+        });
+
+        // Display the cart when the page loads
+        displayCart();
+    </script>
+</body>
+</html>
+-------------->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet"> 
+    <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ddd;
+        }
+
+        main {
+            padding: 100px 20px;
+        }
+
+        .cart-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        #cartList {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-item {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-item img {
+            max-width: 80px;
+            height: auto;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item .item-details {
+            flex: 1;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-controls button {
+            margin: 0 5px;
+        }
+
+        .total-amount {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        #proceedButton {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+        }
+
+        #proceedButton:hover {
+            background-color: #45a049;
+        }
+
+        #deliveryDetails {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #deliveryDetails label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        #deliveryDetails input[type="text"],
+        #deliveryDetails input[type="tel"],
+        #deliveryDetails textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        #confirmPaymentBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 20px auto 0;
+            width: 100%;
+        }
+
+        #confirmPaymentBtn:hover {
+            background-color: #218838;
+        }
+
+        .empty-cart {
+            text-align: center;
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .cart-section {
+                padding: 10px;
+            }
+
+            #deliveryDetails {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="brand-title">Wood Work Street</h1>
+            <nav class="nav-links">
+                <a href="displayProduct.html">Home</a>
+                <a href="cutomerSearch.html">Search</a>
+                <a href="Profile.html">Profile</a>
+                <a href="cart.html">Cart</a>
+                <a href="#order">Order</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="cart-section">
+            <h2>Your Cart</h2>
+            <div id="cartList"></div> 
+            <div class="total-amount" id="totalAmount" style="display: none;">Total Amount: $0.00</div>
+            <button id="proceedButton" style="display: none;">Proceed</button> 
+            <div id="deliveryDetails" style="display: none;">
+                <h3>Delivery Details</h3>
+                <label for="customerName">Name:</label>
+                <input type="text" id="customerName" required>
+                
+                <label for="customerPhone">Phone:</label>
+                <input type="tel" id="customerPhone" required>
+                
+                <label for="customerAddress">Address:</label>
+                <textarea id="customerAddress" required></textarea>
+                
+                <h4>Payment Method:</h4>
+                <input type="radio" name="paymentMethod" value="upi" id="upi">
+                <label for="upi">UPI Payment</label><br>
+                <input type="radio" name="paymentMethod" value="cod" id="cod">
+                <label for="cod">Cash on Delivery</label><br>
+                <input type="radio" name="paymentMethod" value="creditCard" id="creditCard">
+                <label for="creditCard">Credit Card</label><br>
+
+                <button id="confirmPaymentBtn">Proceed to Payment</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Wood Work Street. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function displayCart() {
+            const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const cartList = document.getElementById('cartList');
+            const totalAmountElement = document.getElementById('totalAmount');
+            cartList.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartList.innerText = 'Your cart is empty.';
+                totalAmountElement.style.display = 'none'; 
+                return;
+            }
+
+            let totalAmount = 0; 
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item'); 
+                cartItem.innerHTML = `
+                    <img src="${item.imageUrl}" alt="${item.title}" />
+                    <div class="item-details">
+                        <h3 class="item-title">${item.title}</h3>
+                        <p class="item-price">Price: $${item.price.toFixed(2)}</p>
+                    </div>
+                `;
+
+                const quantityControls = document.createElement('div');
+                quantityControls.classList.add('quantity-controls');
+
+                const minusButton = document.createElement('button');
+                minusButton.innerText = '-';
+                minusButton.onclick = () => updateQuantity(item.id, -1);
+
+                const quantityDisplay = document.createElement('span');
+                quantityDisplay.innerText = ` Quantity: ${item.quantity} `;
+
+                const plusButton = document.createElement('button');
+                plusButton.innerText = '+';
+                plusButton.onclick = () => updateQuantity(item.id, 1);
+
+                quantityControls.appendChild(minusButton);
+                quantityControls.appendChild(quantityDisplay);
+                quantityControls.appendChild(plusButton);
+
+                cartItem.appendChild(quantityControls);
+                cartList.appendChild(cartItem);
+
+                totalAmount += item.price * item.quantity;
+            });
+
+            totalAmountElement.innerText = `Total Amount: $${totalAmount.toFixed(2)}`;
+            totalAmountElement.style.display = 'block'; 
+
+            document.getElementById('proceedButton').style.display = 'block';
+        }
+
+        function updateQuantity(itemId, change) {
+            const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+            const item = cart.find(i => i.id === itemId);
+
+            if (item) {
+                item.quantity += change;
+
+                if (item.quantity <= 0) {
+                    const index = cart.indexOf(item);
+                    cart.splice(index, 1); 
+                }
+
+                sessionStorage.setItem('cart', JSON.stringify(cart));
+                displayCart();
+            }
+        }
+
+        document.getElementById('proceedButton').onclick = function() {
+            document.getElementById('deliveryDetails').style.display = 'block'; 
+            const totalAmountElement = document.getElementById('totalAmount');
+            const totalAmount = parseFloat(totalAmountElement.innerText.replace(/[^0-9.-]+/g,"")); // Extract amount
+            if (totalAmount === 0) {
+                alert("Your cart is empty. Please add items before proceeding.");
+                return;
+            }
+        };
+/*
+document.getElementById('confirmPaymentBtn').onclick = function() {
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const customerAddress = document.getElementById('customerAddress').value;
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+
+    if (!paymentMethod) {
+        alert("Please select a payment method.");
+        return;
+    }
+
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const totalAmount = parseFloat(document.getElementById('totalAmount').innerText.replace(/[^0-9.-]+/g,""));
+    const orderDetails = {
+        customerName,
+        customerPhone,
+        customerAddress,
+        paymentMethod: paymentMethod.value,
+        totalAmount,
+        date: new Date().toISOString(), // Capture current date and time in ISO format
+        items: cart
+    };
+
+    // Save order details to Firestore
+    fetch('https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/orderDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            fields: {
+                customerName: { stringValue: customerName },
+                customerPhone: { stringValue: customerPhone },
+                customerAddress: { stringValue: customerAddress },
+                paymentMethod: { stringValue: paymentMethod.value },
+                totalAmount: { doubleValue: totalAmount },
+                date: { stringValue: orderDetails.date }, // Store date in Firestore
+                items: {
+                    arrayValue: {
+                        values: cart.map(item => ({
+                            mapValue: {
+                                fields: {
+                                    id: { stringValue: item.id },
+                                    title: { stringValue: item.title },
+                                    price: { doubleValue: item.price },
+                                    quantity: { integerValue: item.quantity }
+                                }
+                            }
+                        }))
+                    }
+                }
+            }
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            sessionStorage.removeItem('cart'); // Clear the cart after order is placed
+            alert("Order placed successfully!");
+            window.location.href = "orderConfirmation.html"; // Redirect to order confirmation page
+        } else {
+            alert("Failed to place order. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while placing your order. Please try again.");
+    });
+};*/
+document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    const customerName = document.getElementById('customerName').value;
+    const customerPhone = document.getElementById('customerPhone').value;
+    const customerAddress = document.getElementById('customerAddress').value;
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+    if (cart.length === 0) {
+        alert('Your cart is empty. Please add items to your cart before proceeding.');
+        return;
+    }
+
+    const totalAmount = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+    // Generate bill.txt content
+    const currentDateTime = new Date();
+    const formattedDateTime = currentDateTime.toLocaleString();
+
+    let billContent = `Wood Work Street\n`;
+    billContent += `Date & Time: ${formattedDateTime}\n`;
+    billContent += '--------------------------------\n'; 
+    billContent += `Customer Name: ${customerName}\n`;
+    billContent += `Phone: ${customerPhone}\n`;
+    billContent += `Address: ${customerAddress}\n`;
+    billContent += `Payment Method: ${paymentMethod}\n`;
+    billContent += '--------------------------------\n'; 
+    billContent += `Order Details:\n`;
+    cart.forEach(item => {
+        billContent += `${item.title} - Quantity: ${item.quantity}, Price: $${item.price.toFixed(2)}\n`;
+    });
+    billContent += `Total Amount: $${totalAmount.toFixed(2)}\n`;
+    billContent += '--------------------------------\n'; 
+    billContent += 'Thank you for visiting! Come again!\n'; 
+
+    // Create a blob and download the bill.txt file
+    const blob = new Blob([billContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'bill.txt';
+    link.click();
+
+    // Prepare order details for Firestore
+    const orderDetails = {
+        customerName,
+        customerPhone,
+        customerAddress,
+        paymentMethod,
+        totalAmount,
+        date: currentDateTime.toISOString().split('T')[0], // Only date part
+        time: currentDateTime.toISOString().split('T')[1].split('.')[0], // Only time part
+        items: cart
+    };
+
+    // Save order details to Firestore
+    fetch('https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/orderDetails', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            fields: {
+                customerName: { stringValue: customerName },
+                customerPhone: { stringValue: customerPhone },
+                customerAddress: { stringValue: customerAddress },
+                paymentMethod: { stringValue: paymentMethod },
+                totalAmount: { doubleValue: totalAmount },
+                date: { stringValue: orderDetails.date }, // Store date in Firestore
+                time: { stringValue: orderDetails.time }, // Store time in Firestore
+                items: {
+                    arrayValue: {
+                        values: cart.map(item => ({
+                            mapValue: {
+                                fields: {
+                                    id: { stringValue: item.id },
+                                    title: { stringValue: item.title },
+                                    price: { doubleValue: item.price },
+                                    quantity: { integerValue: item.quantity }
+                                }
+                            }
+                        }))
+                    }
+                }
+            }
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            sessionStorage.removeItem('cart'); // Clear the cart after order is placed
+            window.location.href = "order.html"; // Redirect to order page to display details
+        } else {
+            alert("Failed to place order. Please try again.");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("An error occurred while placing your order. Please try again.");
+    });
+});
+
+
+        displayCart(); // Call the function to display cart items when the page loads
+    </script>
+</body>
+</html>

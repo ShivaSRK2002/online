@@ -1,0 +1,107 @@
+<!----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="adminReadStyle.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory</h1>
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Category ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryList"></tbody> 
+        </table>
+
+        
+        <div id="updateItemModal" style="display: none;">
+            <h2>Update Item</h2>
+            <form id="updateItemForm">
+                <input type="hidden" id="updateItemId" name="itemId">
+                <label for="updateCatId">Category ID:</label>
+                <input type="text" id="updateCatId" name="catId" required>
+                <label for="updateTitle">Title:</label>
+                <input type="text" id="updateTitle" name="title" required>
+                <label for="updateDescription">Description:</label>
+                <textarea id="updateDescription" name="description" required></textarea>
+                <label for="updateQuantity">Quantity:</label>
+                <input type="number" id="updateQuantity" name="quantity" required>
+                <label for="updatePrice">Price:</label>
+                <input type="number" step="0.01" id="updatePrice" name="price" required>
+                <label for="updateImageUrl">Image URL:</label>
+                <input type="text" id="updateImageUrl" name="imageUrl">
+                <button type="submit">Update Item</button>
+                <button type="button" onclick="closeUpdateModal()">Cancel</button>
+            </form>
+        </div>
+
+    </div>
+    <script src="adminReadScript.js"></script> 
+</body>
+</html>
+------>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory</title>
+    <link rel="stylesheet" href="adminReadStyle.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Inventory</h1>
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Category ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventoryList"></tbody> <!-- Container to display inventory items -->
+        </table>
+
+        <!-- Update Item Modal -->
+        <div id="updateItemModal" style="display: none;">
+            <h2>Update Item</h2>
+            <form id="updateItemForm">
+                <input type="hidden" id="updateItemId" name="itemId"> <!-- This can be removed if you don't need it -->
+                <label for="updateCatId">Category ID:</label>
+                <input type="text" id="updateCatId" name="catId" required>
+                <label for="updateTitle">Title:</label>
+                <input type="text" id="updateTitle" name="title" required>
+                <label for="updateDescription">Description:</label>
+                <textarea id="updateDescription" name="description" required></textarea>
+                <label for="updateQuantity">Quantity:</label>
+                <input type="number" id="updateQuantity" name="quantity" required>
+                <label for="updatePrice">Price:</label>
+                <input type="number" step="0.01" id="updatePrice" name="price" required>
+                <label for="updateImageUrl">Image URL:</label>
+                <input type="text" id="updateImageUrl" name="imageUrl">
+                <button type="submit">Update Item</button>
+                <button type="button" onclick="closeUpdateModal()">Cancel</button>
+            </form>
+        </div>
+
+    </div>
+    <script src="adminReadScript.js"></script> <!-- Link to your JavaScript file -->
+</body>
+</html>

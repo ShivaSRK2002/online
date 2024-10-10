@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Item Details</title>
+    <link rel="stylesheet" href="updateItem.css">
+</head>
+<body>
+    <h1>Update Item Details</h1>
+    <div>
+        <input type="text" id="categorySearch" placeholder="Search Category" onkeyup="searchCategories()">
+        <div id="categorySuggestions" class="suggestions"></div>
+    </div>
+    
+    <table id="itemTable" class="hidden">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Active</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="itemBody">
+            <!-- Dynamic item rows will be added here -->
+        </tbody>
+    </table>
+
+    <script src="updateItem.js"></script>
+</body>
+</html>

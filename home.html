@@ -1,0 +1,353 @@
+<!----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wood Works Street - Online Shopping</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Style for header */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: slideInDown 1s ease-out;
+        }
+
+        @keyframes slideInDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Styling for the nav bar */
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: space-around;
+            background-color: #34495e;
+        }
+
+        nav ul li {
+            display: inline;
+        }
+
+        nav ul li a, #loginBtn {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover, #loginBtn:hover {
+            background-color: #1abc9c;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* For the hidden login options */
+        #loginOptions {
+            margin-top: 100px;
+            display: none;
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Main body styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin-top: 100px;
+            background: linear-gradient(135deg, #f1c40f, #e74c3c, #9b59b6);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            font-size: 3em;
+            letter-spacing: 2px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Additional padding to body to avoid content hiding behind the fixed header */
+        .content {
+            padding-top: 150px;
+            animation: fadeIn 2s ease;
+        }
+
+        /* Styling for search bar */
+        .search-container {
+            text-align: center;
+            margin-top: 20px;
+            animation: zoomIn 1.5s ease;
+        }
+
+        .search-container input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .search-container input[type="text"]:focus {
+            border-color: #1abc9c;
+            box-shadow: 0 0 10px #1abc9c;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .search-container button:hover {
+            background-color: #1abc9c;
+            transform: scale(1.05);
+        }
+
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wood Works Street</h1>
+        <nav>
+            <ul>
+                <li><a href="displayInventory.html">Home</a></li>
+              
+                <li><button id="loginBtn">Login</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content">
+      
+        <section id="searchSection" class="search-container">
+            <h2>Search for Products</h2>
+            <input type="text" id="searchInput" placeholder="Enter product name">
+            <button onclick="searchProduct()">Search</button>
+        </section>
+
+        <div id="loginOptions" class="hidden">
+            <h2>Select Login Type</h2>
+          
+        </div>
+    </div>
+
+    <script>
+        // Redirect to index.html on login button click
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        function searchProduct() {
+            const query = document.getElementById('searchInput').value;
+            alert('Searching for: ' + query);
+            // Implement your search logic here
+        }
+    </script>
+
+</body>
+</html>
+----------->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wood Works Street - Online Shopping</title>    
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Style for header */
+        /* Style for header */
+header {
+    background-color: #ffffff; /* White background for header */
+    color: #2c3e50; /* Dark text color for contrast */
+    padding: 20px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: slideInDown 1s ease-out;
+}
+
+/* Styling for the nav bar */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: #2ecc71; /* Green background for nav bar */
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a, #loginBtn {
+    color: white; /* White text color for links */
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+nav ul li a:hover, #loginBtn:hover {
+    background-color: #27ae60; /* Darker green on hover */
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Main body styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin-top: 100px;
+    background-color: #f9f9f9; /* Light gray background for the body */
+}
+
+/* Content styling */
+.content {
+    padding-top: 150px;
+    animation: fadeIn 2s ease;
+}
+
+h1 {
+    font-size: 3em;
+    letter-spacing: 2px;
+    color: #2c3e50; /* Dark text color for headings */
+    animation: fadeIn 1.5s ease-out;
+}
+
+.search-container {
+    text-align: center;
+    margin-top: 20px;
+    animation: zoomIn 1.5s ease;
+}
+
+.search-container input[type="text"] {
+    width: 50%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #2ecc71; /* Green border for input */
+    border-radius: 25px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-container input[type="text"]:focus {
+    border-color: #27ae60; /* Darker green when focused */
+    box-shadow: 0 0 10px #27ae60;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #2ecc71; /* Green background for button */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-left: 10px;
+}
+
+.search-container button:hover {
+    background-color: #27ae60; /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wood Works Street</h1>
+        <nav>
+            <ul>
+                <li><a href="displayProduct.html">Home</a></li>
+                <li><button id="loginBtn">Login</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content">
+        <section id="searchSection" class="search-container">
+            <h2>Search for Products</h2>
+            <input type="text" id="searchInput" placeholder="Enter product name">
+            <button onclick="searchProduct()">Search</button>
+        </section>
+
+        <div id="loginOptions" class="hidden">
+            <h2>Select Login Type</h2>
+            <!-- Additional login options can go here -->
+        </div>
+    </div>
+
+    <script>
+        // Redirect to index.html on login button click
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+
+        function searchProduct() {
+            const query = document.getElementById('searchInput').value;
+            alert('Searching for: ' + query);
+            // Implement your search logic here
+        }
+    </script>
+
+</body>
+</html>
+

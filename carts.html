@@ -1,0 +1,105 @@
+<!----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="cartStyle.css"> 
+</head>
+<body>
+    <h1>Your Shopping Cart 🛒</h1>
+    <div id="cart"></div>
+    <div id="totalPriceContainer">
+        <h2>Total Price: $<span id="totalPrice">0.00</span></h2>
+    </div>
+    
+    
+<div id="customerDetails">
+    <h2>Customer Details</h2>
+    <form id="customerForm">
+        <label for="customerName">Name:</label>
+        <input type="text" id="customerName" name="customerName" readonly><br>
+
+        <label for="customerEmail">Email:</label>
+        <input type="email" id="customerEmail" name="customerEmail" readonly><br>
+
+        <label for="customerPhone">Phone:</label>
+        <input type="tel" id="customerPhone" name="customerPhone" readonly><br>
+
+        <label for="customerAddress">Address:</label>
+        <input type="text" id="customerAddress" name="customerAddress" required placeholder="Enter your address"><br>
+
+        <button type="button" id="confirmPaymentBtn">Confirm Payment</button>
+    </form>
+</div>
+
+<div id="cart"></div>
+
+    
+    
+    <div id="currentDateTime">
+        <h2>Current Date and Time</h2>
+        <p id="dateTimeDisplay"></p>
+    </div>
+    
+
+    <button id="confirmButton">Confirm and Proceed to Payment</button>
+    
+    <script src="cartScript.js"></script>
+</body>
+</html>
+-->
+
+
+<!----  cart done - same cart displayed for all customer -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="carts.css"> <!-- Add your stylesheet if needed -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet"> <!-- Import stylish font -->
+</head>
+<body>
+    <header></header>
+        <div class="header-container">
+            <h1 class="brand-title">Wood Work Street</h1>
+            <nav class="nav-links">
+                <a href="customerHome.html">Home</a>
+                <a href="#search">Search</a>
+                <a href="Profile.html">Profile</a>
+                <a href="carts.html">Cart</a>
+                <a href="#order">Order</a>
+            </nav>
+        </div>
+    </header>
+    <h1>Your Cart</h1>
+
+    <!-- Cart Display -->
+    <div id="cart"></div>
+
+    <!-- Customer Delivery Address -->
+    <h2>Delivery Details</h2>
+    <form>
+        <label for="customerName">Name:</label>
+        <input type="text" id="customerName" readonly><br>
+
+        <label for="customerEmail">Email:</label>
+        <input type="email" id="customerEmail" readonly><br>
+
+        <label for="customerPhone">Phone:</label>
+        <input type="text" id="customerPhone" readonly><br>
+
+        <label for="customerAddress">Address:</label>
+        <textarea id="customerAddress" required></textarea><br>
+    </form>
+
+    <!-- Confirm Payment Button -->
+    <button id="confirmPaymentBtn">Confirm and Proceed</button>
+
+    <script src="carts.js"></script> <!-- Link to your cart JavaScript -->
+</body>
+</html>
+

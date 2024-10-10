@@ -1,0 +1,180 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light background for contrast */
+}
+
+.header-container {
+    background-color: #4CAF50; /* Green background for header */
+    color: white; /* White text for header */
+    padding: 20px; /* Padding for the header */
+    text-align: center; /* Center align header text */
+}
+
+.brand-title {
+    font-family: 'Pacifico', cursive; /* Cursive font for a stylish look */
+    font-size: 36px; /* Large font size for emphasis */
+    font-weight: 700; /* Bold font weight */
+    color: #FFD700; /* Gold color for the brand title */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+    margin: 0; /* Remove default margin */
+}
+
+.nav-links {
+    margin-top: 15px; /* Space between brand title and navigation */
+}
+
+.nav-links a {
+    color: white; /* White text for navigation links */
+    text-decoration: none; /* Remove underline from links */
+    margin: 0 15px; /* Space between links */
+    font-weight: 500; /* Medium weight for links */
+}
+
+.nav-links a:hover {
+    text-decoration: underline; /* Underline on hover for interactivity */
+}
+
+.container {
+    padding: 10px; /* Reduce padding for smaller container */
+    max-width: 1200px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+}
+
+#pagination {
+    margin-top: 20px; /* Space above pagination buttons */
+    text-align: center; /* Center align pagination buttons */
+}
+
+/* Button container for responsive design */
+.button-container {
+    display: flex; /* Flexbox for button layout */
+    justify-content: space-between; /* Evenly space out the buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    margin: 20px 0; /* Margin for spacing */
+}
+
+#prevPageBtn,
+#nextPageBtn {
+    padding: 10px 15px; /* Padding for buttons */
+    margin: 5px; /* Space between buttons */
+    color: white; /* White text for buttons */
+    border: none; /* No border for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for buttons */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth background change on hover */
+}
+
+/* Assign different colors to the buttons */
+#prevPageBtn {
+    background-color: #6c757d; /* Bootstrap Secondary Color */
+}
+
+#nextPageBtn {
+    background-color: #007BFF; /* Bootstrap Primary Color */
+}
+
+/* Hover effects for buttons */
+#prevPageBtn:hover {
+    background-color: #5a6268; /* Darker shade for hover */
+}
+
+#nextPageBtn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Styles for the inventory list */
+#inventoryList {
+    margin: 20px;
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow wrapping to new rows */
+    justify-content: space-around; /* Space out items evenly */
+}
+
+.item-container {
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Rounded corners for a smoother look */
+    padding: 10px; /* Reduce padding for smaller container */
+    margin: 10px; /* Margin for spacing */
+    flex: 0 1 calc(20% - 20px); /* Each item takes up 20% of the row */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Add smooth transitions */
+    background-color: #fff; /* White background for item container */
+}
+
+.item-container:hover {
+    transform: scale(1.05); /* Slightly scale up on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add a more noticeable shadow on hover */
+}
+
+.item-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.add-to-cart,
+.buy-now {
+    background-color: #007BFF; /* Bootstrap Primary Color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover,
+.buy-now:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+/* Limited stock header styles */
+.limited-stock-header {
+    color: red; /* Red color for limited stock */
+    animation: blink 1s step-start infinite; /* Blinking effect */
+    font-weight: bold; /* Make it bold */
+    margin-bottom: 10px; /* Space below the blinking text */
+}
+
+/* Blink animation */
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Out of stock message */
+.out-of-stock {
+    color: #FF0000; /* Red color for out of stock */
+    font-weight: bold;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+    /* Reduce item container size for smaller screens */
+    .item-container {
+        flex: 0 1 calc(45% - 20px); /* Each item takes up 45% of the row */
+    }
+
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically on small screens */
+        align-items: center; /* Center align buttons */
+    }
+
+    #prevPageBtn,
+    #nextPageBtn {
+        width: 100%; /* Full width buttons for small screens */
+        margin: 10px 0; /* Add space between buttons */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Further reduce item container size for very small screens */
+    .item-container {
+        flex: 0 1 calc(90% - 20px); /* Each item takes up 90% of the row */
+    }
+}

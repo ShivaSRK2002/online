@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Home - Wood Work Streets</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+    <style>
+        /* Fixed Header Styling */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px; /* Decreased header width */
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            position: fixed;
+            top: 50px; /* Below the header */
+            left: -220px; /* Hidden by default */
+            width: 220px;
+            background-color: #34495e;
+            height: calc(100% - 50px); /* Full height minus header */
+            padding-top: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #1abc9c;
+            transform: scale(1.05);
+        }
+
+        /* Main body styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin-left: 0; /* No margin for the sidebar */
+            margin-top: 50px; /* Space for the fixed header */
+            background: linear-gradient(135deg, #f1c40f, #e74c3c, #9b59b6);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            font-size: 2.5em; /* Adjusted font size */
+            letter-spacing: 2px;
+            margin: 10px 0; /* Adjusted margins */
+        }
+
+        /* Content styling */
+        .content {
+            padding: 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: auto; /* Centering the content */
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1; /* Ensure it appears above the background */
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        /* Menu button styling */
+        #menuBtn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #1abc9c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1001; /* Above the header */
+            transition: background-color 0.3s;
+        }
+
+        #menuBtn:hover {
+            background-color: #16a085;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Wood Work Streets</h1>
+    </header>
+
+    <!-- Menu button -->
+    <button id="menuBtn">☰ Menu</button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li><a href="category.html">Add Category</a></li>
+            <li><a href="editItem.html">Add Item</a></li>
+            <li><a href="adminRead.html">Edit Item</a></li>
+            <li><a href="delete.html">Delete Item</a></li>
+            <li><a href="downloadReport.html" id="downloadReportBtn">Download Report</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main content area -->
+    <div class="content">
+        <h2>Welcome to the Admin Panel!</h2>
+        <p>Please select an option from the sidebar to manage your inventory.</p>
+    </div>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebar = document.getElementById('sidebar');
+        const menuBtn = document.getElementById('menuBtn');
+
+        menuBtn.addEventListener('click', () => {
+            if (sidebar.style.left === "0px") {
+                sidebar.style.left = "-220px"; // Hide sidebar
+            } else {
+                sidebar.style.left = "0px"; // Show sidebar
+            }
+        });
+
+        // Logout Functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            window.location.href = 'home.html';
+        });
+    </script>
+</body>
+</html>
+

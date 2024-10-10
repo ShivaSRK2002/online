@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Home Page</title>
+    <link rel="stylesheet" href="customerHomeStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+       
+       * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+}
+
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light background for contrast */
+}
+
+.header-container {
+    background-color: #4CAF50; /* Green background for header */
+    color: white; /* White text for header */
+    padding: 20px; /* Padding for the header */
+    text-align: center; /* Center align header text */
+}
+
+.brand-title {
+    font-family: 'Pacifico', cursive; /* Cursive font for a stylish look */
+    font-size: 36px; /* Large font size for emphasis */
+    font-weight: 700; /* Bold font weight */
+    color: #FFD700; /* Gold color for the brand title */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+    margin: 0; /* Remove default margin */
+}
+
+.nav-links {
+    margin-top: 15px; /* Space between brand title and navigation */
+}
+
+.nav-links a {
+    color: white; /* White text for navigation links */
+    text-decoration: none; /* Remove underline from links */
+    margin: 0 15px; /* Space between links */
+    font-weight: 500; /* Medium weight for links */
+}
+
+.nav-links a:hover {
+    text-decoration: underline; /* Underline on hover for interactivity */
+}
+
+.container {
+    padding: 10px; /* Reduce padding for smaller container */
+    max-width: 1200px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+}
+
+#pagination {
+    margin-top: 20px; /* Space above pagination buttons */
+    text-align: center; /* Center align pagination buttons */
+}
+
+#prevPageBtn,
+#nextPageBtn {
+    padding: 10px 15px; /* Padding for buttons */
+    margin: 5px; /* Space between buttons */
+    background-color: #4CAF50; /* Same green as header */
+    color: white; /* White text for buttons */
+    border: none; /* No border for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px; /* Font size for buttons */
+    transition: background-color 0.3s; /* Smooth background change on hover */
+}
+
+#prevPageBtn:hover,
+#nextPageBtn:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #4a8c2c;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .search-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .search-section input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .search-section button {
+            padding: 10px;
+            border: none;
+            background-color: #4a8c2c;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .suggestions {
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            background-color: white;
+            z-index: 10;
+            width: 220px;
+            margin-top: 5px;
+        }
+        .suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .suggestions div:hover {
+            background-color: #e0e0e0;
+        }
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+        .product-item {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            background-color: white;
+        }
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .product-item button {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4a8c2c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1 class="brand-title">Wood Work Street</h1>
+            <nav class="nav-links">
+                <a href="displayProduct.html">Home</a>
+                <a href="#search" id="searchLink">Search</a>
+                <a href="Profile.html">Profile</a>
+                <a href="cart.html">Cart</a>
+                <a href="#order">Order</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="welcome-section">
+            <h2>Welcome to Wood Work Street!</h2>
+            <p>Explore our exquisite collection of handcrafted wooden furniture and home decor.</p>
+        </section>
+
+        <section class="search-section" id="searchSection" style="display:none;">
+            <input type="text" id="categoryInput" placeholder="Enter category name" />
+            <button id="searchButton">Search</button>
+            <div id="suggestions" class="suggestions"></div>
+        </section>
+
+        <section class="product-list" id="productList"></section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Wood Work Street. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const firestoreCategoriesUrl = 'https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents/categories';
+        const firestoreInventoryUrl = 'https://firestore.googleapis.com/v1/projects/inventory-46f20/databases/(default)/documents:runQuery';
+        const productList = document.getElementById('productList');
+
+        // Fetch categories from Firestore
+        async function fetchCategories() {
+            try {
+                const response = await fetch(firestoreCategoriesUrl);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch categories');
+                }
+                const data = await response.json();
+                return data.documents.map(doc => doc.fields.name.stringValue); // Adjust field names as necessary
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+                return [];
+            }
+        }
+
+        // Handle search button click
+        document.getElementById('searchLink').addEventListener('click', async () => {
+            const categories = await fetchCategories();
+            console.log('Fetched categories:', categories); // Debugging line
+            document.getElementById('searchSection').style.display = 'block';
+            const categoryInput = document.getElementById('categoryInput');
+            const suggestions = document.getElementById('suggestions');
+
+            categoryInput.addEventListener('input', () => {
+                const inputValue = categoryInput.value.toLowerCase();
+                suggestions.innerHTML = ''; // Clear previous suggestions
+                if (inputValue) {
+                    const filteredCategories = categories.filter(category => category.toLowerCase().includes(inputValue));
+                    filteredCategories.forEach(category => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.textContent = category;
+                        suggestionItem.onclick = () => {
+                            categoryInput.value = category;
+                            suggestions.innerHTML = ''; // Clear suggestions
+                            fetchProductsByCategory(category); // Fetch products once a category is clicked
+                        };
+                        suggestions.appendChild(suggestionItem);
+                    });
+                }
+            });
+
+            document.getElementById('searchButton').addEventListener('click', () => {
+                const selectedCategory = categoryInput.value.trim();
+                console.log('Search button clicked. Selected category:', selectedCategory); // Debugging line
+                if (categories.includes(selectedCategory)) {
+                    fetchProductsByCategory(selectedCategory);
+                } else {
+                    alert('Category not found. Please try again.');
+                }
+            });
+        });
+
+        // Fetch products based on category name
+        async function fetchProductsByCategory(category) {
+            const query = {
+                structuredQuery: {
+                    from: [{ collectionId: 'InventoryRecord' }],
+                    where: {
+                        fieldFilter: {
+                            field: { fieldPath: 'category' },
+                            op: 'EQUAL',
+                            value: { stringValue: category }
+                        }
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(firestoreInventoryUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(query),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch products');
+                }
+
+                const data = await response.json();
+                displayProducts(data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        }
+
+        // Display products in the UI
+function displayProducts(products) {
+    productList.innerHTML = ''; // Clear previous results
+
+    if (!products || products.length === 0) {
+        productList.innerHTML = '<p>No products found for this category.</p>';
+        return;
+    }
+
+    products.forEach(doc => {
+        // Check if document and fields exist
+        if (doc.document && doc.document.fields) {
+            const product = {
+                id: doc.document.name.split('/').pop(),
+                name: doc.document.fields.name ? doc.document.fields.name.stringValue : 'Unnamed Product',
+                price: doc.document.fields.price ? doc.document.fields.price.doubleValue : 0,
+                imageUrl: doc.document.fields.imageUrl ? doc.document.fields.imageUrl.stringValue : '', // Adjust based on your document structure
+            };
+
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            productItem.innerHTML = `
+                <img src="${product.imageUrl}" alt="${product.name}" onerror="this.onerror=null; this.src='fallback-image-url.jpg';"> <!-- Optional: Fallback image -->
+                <h3>${product.name}</h3>
+                <p>Price: $${product.price.toFixed(2)}</p>
+                <button onclick="addToCart('${product.id}')">Add to Cart</button>
+                <button onclick="buyNow('${product.id}')">Buy Now</button>
+            `;
+            productList.appendChild(productItem);
+        } else {
+            console.warn('Document structure is not as expected:', doc);
+        }
+    });
+}
+
+
+        // Placeholder functions for Add to Cart and Buy Now
+        function addToCart(productId) {
+            alert('Product added to cart: ' + productId);
+        }
+
+        function buyNow(productId) {
+            alert('Proceeding to buy: ' + productId);
+        }
+    </script>
+</body>
+</html>
